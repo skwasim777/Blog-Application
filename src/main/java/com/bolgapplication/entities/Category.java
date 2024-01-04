@@ -1,6 +1,5 @@
 package com.bolgapplication.entities;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,22 +11,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name="ctogeries")
 @NoArgsConstructor
 @Setter
 @Getter
-public class User {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-
-	private int id;
-
-	private String name;
-
-	private String email;
-
-	private String password;
-
-	private String about;
+public class Category {
+		@Id
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		private Integer categoryId;
+		private String categoryTitle;
+		private String categoryDesc;
 }

@@ -2,6 +2,8 @@ package com.bolgapplication.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +27,15 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/")
-	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userdto) {
+	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userdto) {
 		UserDTO createUserdto = this.userService.crateUser(userdto);
-		return new ResponseEntity(createUserdto, HttpStatus.CREATED);
+		return new ResponseEntity<UserDTO>(createUserdto, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userdto, @PathVariable Integer id) {
+	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userdto, @PathVariable Integer id) {
 		UserDTO updatedUSer = this.userService.updateUSer(userdto, id);
-		return new ResponseEntity(updatedUSer, HttpStatus.OK);
+		return new ResponseEntity<UserDTO>(updatedUSer, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
@@ -46,12 +48,15 @@ public class UserController {
 	@GetMapping("/")
 	public ResponseEntity<List<UserDTO>> getAllUsers() {
 		return ResponseEntity.ok(this.userService.getAllUsers());
-
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> getSingleUser(@PathVariable Integer id) {
 		return ResponseEntity.ok(this.userService.getUserById(id));
-
+	}
+	@DeleteMapping("/")
+	public ResponseEntity<ApiResponse> deleteAllUsers(){
+		this.userService.deleteAllUsers();
+		return new ResponseEntity<ApiResponse>(new ApiResponse("Users deleted successfully",true),HttpStatus.OK);	
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import com.bolgapplication.services.UserService;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepo userRepo;
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public UserDTO crateUser(UserDTO userdto) {
@@ -58,23 +61,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private User dtoToUser(UserDTO userdto) {
-		User user = new User();
-		user.setId(userdto.getId());
-		user.setName(userdto.getName());
-		user.setEmail(userdto.getEmail());
-		user.setPassword(userdto.getPassword());
-		user.setAbout(userdto.getAbout());
+		User user = this.modelMapper.map(userdto, User.class);
 		return user;
 	}
 
 	private UserDTO userToUserDTO(User user) {
-		UserDTO userdto = new UserDTO();
-		userdto.setId(user.getId());
-		userdto.setName(user.getName());
-		userdto.setEmail(user.getEmail());
-		userdto.setPassword(user.getPassword());
-		userdto.setAbout(user.getAbout());
+		UserDTO userdto = this.modelMapper.map(user, UserDTO.class);
 		return userdto;
 
+	}
+
+	@Override
+	public void deleteAllUsers() {
+		this.userRepo.deleteAll();
 	}
 }
