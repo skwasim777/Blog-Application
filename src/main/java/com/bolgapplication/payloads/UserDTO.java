@@ -1,5 +1,9 @@
 package com.bolgapplication.payloads;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UserDTO {
-	private int id;
+	private Integer id;
 	@NotEmpty
 	@Size(min = 4, message = "Username must be min of 4 character")
 	private String name;
@@ -24,4 +28,5 @@ public class UserDTO {
 	private String password;
 	@NotEmpty
 	private String about;
+	private Set<CommentDto> comments = new HashSet<>();
 }

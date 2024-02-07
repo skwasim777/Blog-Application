@@ -1,16 +1,20 @@
 package com.bolgapplication.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bolgapplication.config.AppConstant;
+import com.bolgapplication.entities.Role;
 import com.bolgapplication.entities.User;
 import com.bolgapplication.exceptions.ResourceNotFoundException;
 import com.bolgapplication.payloads.UserDTO;
+import com.bolgapplication.repositories.RoleRepo;
 import com.bolgapplication.repositories.UserRepo;
 import com.bolgapplication.services.UserService;
 
@@ -20,8 +24,11 @@ public class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private RoleRepo roleRepo;
 
-	@Override
 	public UserDTO crateUser(UserDTO userdto) {
 		User user = this.dtoToUser(userdto);
 		User savedUsers = this.userRepo.save(user);
@@ -75,4 +82,17 @@ public class UserServiceImpl implements UserService {
 	public void deleteAllUsers() {
 		this.userRepo.deleteAll();
 	}
+
+	@Override
+	public UserDTO registerNewUser(UserDTO userDto) {
+		userDto.setId(null);
+		modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+		User user = this.modelMapper.map(userDto, User.class);
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		Role role = this.roleRepo.findById(AppConstant.NORMAL_USER).get();
+		user.getRoles().add(role);
+		User newUser = this.userRepo.save(user);
+		return this.modelMapper.map(newUser, UserDTO.class);
+	}
+
 }

@@ -27,12 +27,14 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
+	// create category
 	@PostMapping("/")
 	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
 		CategoryDto createCategory = this.categoryService.createCategory(categoryDto);
 		return new ResponseEntity(createCategory, HttpStatus.CREATED);
 	}
 
+	// update category
 	@PutMapping("/{catId}")
 	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto,
 			@PathVariable Integer catId) {
@@ -40,22 +42,25 @@ public class CategoryController {
 		return new ResponseEntity(updateCategory, HttpStatus.OK);
 	}
 
+//delete category
 	@DeleteMapping("/{catId}")
 	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Integer catId) {
 		this.categoryService.deleteCategory(catId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("user deleted successfully", true), HttpStatus.OK);
 	}
 
+// get all category
 	@GetMapping("/")
 	public ResponseEntity<List<CategoryDto>> getAllCategories() {
 		List<CategoryDto> allCategory = this.categoryService.getAllCategory();
 		return ResponseEntity.ok(allCategory);
 	}
 
+// get category by id
 	@GetMapping("/{catId}")
 	public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Integer catId) {
 		CategoryDto category = this.categoryService.getCategory(catId);
-		return new ResponseEntity<CategoryDto>(category,HttpStatus.OK);
+		return new ResponseEntity<CategoryDto>(category, HttpStatus.OK);
 	}
 
 }

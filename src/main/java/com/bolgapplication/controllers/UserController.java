@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import com.bolgapplication.payloads.UserDTO;
 import com.bolgapplication.services.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users" )
 public class UserController {
 	@Autowired
 	private UserService userService;
@@ -37,7 +38,7 @@ public class UserController {
 		UserDTO updatedUSer = this.userService.updateUSer(userdto, id);
 		return new ResponseEntity<UserDTO>(updatedUSer, HttpStatus.OK);
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer id) {
 		this.userService.deleteUserById(id);
