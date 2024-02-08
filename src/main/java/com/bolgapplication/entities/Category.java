@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Category {
+public class Category{
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Integer categoryId;
